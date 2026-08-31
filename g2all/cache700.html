@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" manifest="cache.manifest">
+<html lang="vi" manifest="700.manifest">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -69,21 +69,26 @@
 </style>
 <script>
 history.replaceState(null, null, 'index.html');
-var req = new XMLHttpRequest();
-req.open('GET', 'cache.manifest');
-req.send();
-req.onload = function() {
-    var response = req.response;
-    var count = (response.match(/#/g) || []).length;
-    window.applicationCache.onprogress = function(a) {
-        document.getElementById("msgs").innerHTML = "Đang cài đặt Cache Offline: " + Math.round((a.loaded / count) * 100) + "%";
-    }
-    window.applicationCache.oncached = function() {
-        document.getElementById("msgs").innerHTML = "Cài đặt Cache thành công! Vui lòng ngắt mạng và mở lại trình duyệt.";
-    }
-    window.applicationCache.onerror = function() {
-        document.getElementById("msgs").innerHTML = "Lỗi cài đặt Cache! - Hãy xóa dữ liệu và mở lại trình duyệt...";
-    }
+var histlength = history.length;
+history.go(-histlength);
+
+function DLProgress(e) {
+    var percent = Math.round((e.loaded / e.total) * 100);
+    document.getElementById("msgs").innerHTML = "Đang cài đặt Offline Cache: " + percent + "%";
+}
+
+function DisplayCacheProgress() {
+    document.getElementById("msgs").innerHTML = "Cài đặt Cache thành công! ✔";
+    setTimeout(function() {
+        document.getElementById("msgs").innerHTML = "Bây giờ hãy đóng và mở lại trình duyệt để sử dụng Offline...";
+    }, 1500);
+}
+
+window.applicationCache.addEventListener("progress", DLProgress, false);
+window.applicationCache.oncached = function(e) { DisplayCacheProgress(); };
+window.applicationCache.onupdateready = function(e) { DisplayCacheProgress(); };
+window.applicationCache.onerror = function(e) {
+    document.getElementById("msgs").innerHTML = "Lỗi cài đặt Cache! - Hãy xóa dữ liệu và mở lại trình duyệt...";
 };
 </script>
 </head>
@@ -96,7 +101,7 @@ req.onload = function() {
         <div class="divider"></div>
     </div>
 
-    <div id="msgs" class="content-msg">Đang khởi tạo bộ nhớ đệm Cache... Vui lòng đợi</div>
+    <div id="msgs" class="content-msg">Đang khởi tạo quá trình cài đặt Cache...</div>
 
     <div class="footer">
         <div class="author">Designed by: ShuShiPS</div>
