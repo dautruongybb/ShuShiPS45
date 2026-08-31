@@ -1,23 +1,113 @@
 <!DOCTYPE html>
-<html manifest="css.manifest">
+<html lang="vi" manifest="css.manifest">
 <head>
-<title>PS4 7.00 - 13.00 FW GoldHEN Host by GamerHack</title>
-<link rel="stylesheet" href="../style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AUTO JAILBREAK PS4 - ShuShiPS</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        background-color: #0b0e14;
+        color: #ffffff;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        overflow: hidden;
+    }
+    .card {
+        background-color: #121824;
+        border: 1px solid #1f293d;
+        border-radius: 20px;
+        width: 90%;
+        max-width: 900px;
+        height: 520px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        padding: 45px 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        text-align: center;
+    }
+    .title {
+        color: #0084ff;
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+    }
+    .subtitle {
+        color: #7d8b99;
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 25px;
+    }
+    .divider {
+        width: 85%;
+        height: 1.5px;
+        background: linear-gradient(90deg, transparent, #0056b3, transparent);
+        margin: 0 auto;
+    }
+    .content-msg {
+        color: #ff4d4f;
+        font-size: 23px;
+        font-weight: 500;
+        padding: 0 20px;
+    }
+    .footer {
+        color: #6c7a89;
+        font-size: 15px;
+        line-height: 1.6;
+    }
+    .footer .author {
+        color: #8b99a8;
+        font-size: 16px;
+    }
+</style>
+<script>
+history.replaceState(null, null, 'index.html');
+var histlength = history.length;
+history.go(-histlength);
+
+function DLProgress(e) {
+    var percent = Math.round((e.loaded / e.total) * 100);
+    document.getElementById("msgs").innerHTML = "Đang cài đặt Offline Cache: " + percent + "%";
+}
+
+function DisplayCacheProgress() {
+    document.getElementById("msgs").innerHTML = "Cài đặt Cache thành công! ✔";
+    setTimeout(function() {
+        document.getElementById("msgs").innerHTML = "Bây giờ hãy đóng và mở lại trình duyệt để sử dụng Offline...";
+    }, 1500);
+}
+
+window.applicationCache.addEventListener("progress", DLProgress, false);
+window.applicationCache.oncached = function(e) { DisplayCacheProgress(); };
+window.applicationCache.onupdateready = function(e) { DisplayCacheProgress(); };
+window.applicationCache.onerror = function(e) {
+    document.getElementById("msgs").innerHTML = "Lỗi cài đặt Cache! - Hãy xóa dữ liệu và mở lại trình duyệt...";
+};
+</script>
 </head>
 <body>
-<script>
-history.replaceState(null,null,'index.html');var histlength=history.length;history.go(-histlength);
-function DLProgress(e){Percent=(Math.round(e.loaded / e.total * 100));window.msgs.innerHTML="Installing Offline Cache: " + Percent + "%";}
-function DisplayCacheProgress(){window.msgs.innerHTML="Cache Installed Successfully ✔";setTimeout(function(){window.msgs.innerHTML="Now Close And Re-Open Your Browser ...";},1500);}
-window.applicationCache.addEventListener("progress",DLProgress,false);
-window.applicationCache.oncached=function(e){DisplayCacheProgress();};
-window.applicationCache.onupdateready=function(e){DisplayCacheProgress();};
-window.applicationCache.onerror=function(e){window.msgs.innerHTML="Error Installing Cache! - Clear and Re-Open Your Browser ...";};
-</script>
-<h1>PS4 7.00 - 13.00 FW GoldHEN Host by GamerHack</h1>
-<hr>
-<br>
-<h1 id=msgs style="font-size: 30px;margin-top: 77px;margin-bottom: 455px;">Starting Cache Installation...</h1>
-<h1 style="margin-top: 43px;">Special Thanks to:<a href="https://twitter.com/_AlAzif" style="color: #f31414;margin-left: 10px;margin-right: 10px;">@_AlAzif</a>ChendoChap<a href="https://x.com/Kameleonre_" style="color: #f31414;margin-left: 10px;margin-right: 10px;">@Kameleonre_</a>SiSTR0 Abc</h1>
+
+<div class="card">
+    <div class="header">
+        <div class="title">AUTO JAILBREAK PS4 - ShuShiPS</div>
+        <div class="subtitle">Hỗ Trợ FW 7.00 - 13.00</div>
+        <div class="divider"></div>
+    </div>
+
+    <div id="msgs" class="content-msg">Đang khởi tạo quá trình cài đặt Cache...</div>
+
+    <div class="footer">
+        <div class="author">Designed by: ShuShiPS</div>
+        <div>Special thanks to all scene developers</div>
+    </div>
+</div>
+
 </body>
 </html>
