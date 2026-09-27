@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AUTO JAILBREAK PS4 - SHUSHIPS</title>
+<title>AUTO JAILBREAK PS4 - ShuShiPS</title>
+<!-- Khai báo biến toàn cục msgs ngay từ đầu để chống lỗi ReferenceError -->
+<script>
+var msgs;
+</script>
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
         background-color: #080b11;
         color: #ffffff;
@@ -29,10 +29,7 @@
         padding: 35px 25px 30px;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
     }
-    .header {
-        text-align: center;
-        margin-bottom: 28px;
-    }
+    .header { text-align: center; margin-bottom: 28px; }
     .title {
         color: #0084ff;
         font-size: 20px;
@@ -47,11 +44,7 @@
         font-weight: 600;
         letter-spacing: 0.5px;
     }
-    .info-list {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
+    .info-list { display: flex; flex-direction: column; gap: 12px; }
     .info-row {
         background-color: #121b2b;
         border: 1px solid #1c2b42;
@@ -73,19 +66,16 @@
         font-weight: 700;
         text-align: right;
     }
-    .status-error {
-        color: #ff3b30 !important;
-    }
-    .status-ok {
-        color: #0084ff !important;
-    }
+    .status-ok { color: #0084ff !important; }
+    .status-done { color: #30d158 !important; }
+    .status-error { color: #ff3b30 !important; }
 </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <div class="title">AUTO JAILBREAK PS4 - SHUSHIPS</div>
+        <div class="title">AUTO JAILBREAK PS4 - ShuShiPS</div>
         <div class="subtitle">HỖ TRỢ FW 5.05 - 13.52</div>
     </div>
 
@@ -107,33 +97,48 @@
 
         <div class="info-row">
             <span class="label">Trạng thái</span>
-            <span id="status-val" class="value status-error">Chờ nạp...</span>
+            <!-- ID msgs bắt buộc để lapse.js và alert.js ghi đè nội dung -->
+            <span id="msgs" class="value status-ok">Đang khởi tạo...</span>
         </div>
     </div>
 </div>
 
 <script>
+// Gán đối tượng DOM vào cả biến msgs và window.msgs
+msgs = document.getElementById("msgs");
+window.msgs = msgs;
+
 var uaFull = navigator.userAgent;
 var match = uaFull.match(/PlayStation 4[ /]([\d.]+)/i);
 var isPS4 = match !== null;
 var fwVersion = isPS4 ? match[1] : "Không phải PS4";
 var fwNum = parseFloat(fwVersion);
 
-var fwValElem = document.getElementById("fw-val");
-var statusElem = document.getElementById("status-val");
+document.getElementById("fw-val").innerText = fwVersion;
 
-fwValElem.innerText = fwVersion;
+// Theo dõi thay đổi nội dung để tự động đổi màu sắc hiển thị
+var observer = new MutationObserver(function() {
+    var txt = msgs.innerText.toLowerCase();
+    if (txt.includes("fail") || txt.includes("error") || txt.includes("lỗi") || txt.includes("not supported")) {
+        msgs.className = "value status-error";
+    } else if (txt.includes("done") || txt.includes("successfully") || txt.includes("thành công") || txt.includes("loaded")) {
+        msgs.className = "value status-done";
+    } else {
+        msgs.className = "value status-ok";
+    }
+});
+observer.observe(msgs, { childList: true, characterData: true, subtree: true });
 
 function onScriptError() {
-    statusElem.className = "value status-error";
-    statusElem.innerText = "Không tìm thấy file khai thác! Hãy xóa Cache và thử lại...";
+    msgs.className = "value status-error";
+    msgs.innerText = "Không tìm thấy tệp khai thác! Hãy xóa Cache và thử lại...";
 }
 
 if (!isPS4) {
-    statusElem.className = "value status-error";
-    statusElem.innerText = "Chỉ hỗ trợ máy PS4 FW 5.05 và 7.00 - 13.52";
+    msgs.className = "value status-error";
+    msgs.innerText = "Chỉ hỗ trợ máy PS4 FW 5.05 và 7.00 - 13.52";
 } else {
-    // Kiểm tra và cài đặt cache offline nếu chưa lưu
+    // Điều hướng lưu cache nếu máy chưa có
     if (window.applicationCache && window.applicationCache.status === 0) {
         if (fwNum === 5.05) {
             window.location.replace("cache505.html");
@@ -146,13 +151,12 @@ if (!isPS4) {
         } else if (fwNum >= 11.50 && fwNum <= 13.52) {
             window.location.replace("cacheslopkit.html");
         } else {
-            statusElem.className = "value status-error";
-            statusElem.innerText = "Firmware không được hỗ trợ: " + fwVersion;
+            msgs.className = "value status-error";
+            msgs.innerText = "Firmware không được hỗ trợ: " + fwVersion;
         }
     } else {
-        // Thực thi Payload tương ứng trên PS4 khi đã có cache
-        statusElem.className = "value status-ok";
-        statusElem.innerText = "Đang nạp GoldHEN cho FW " + fwVersion + "... Vui lòng đợi";
+        // Đã có cache -> Bắt đầu nạp script
+        msgs.innerText = "Đang nạp GoldHEN cho FW " + fwVersion + "...";
 
         var script = document.createElement('script');
         script.onerror = onScriptError;
