@@ -5,11 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AUTO JAILBREAK PS4 - ShuShiPS</title>
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
         background-color: #070a10;
         color: #ffffff;
@@ -29,10 +25,7 @@
         padding: 28px 25px 20px;
         box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6);
     }
-    .header {
-        text-align: center;
-        margin-bottom: 22px;
-    }
+    .header { text-align: center; margin-bottom: 22px; }
     .title {
         color: #0084ff;
         font-size: 17px;
@@ -48,10 +41,7 @@
         letter-spacing: 0.5px;
         text-transform: uppercase;
     }
-    .table {
-        display: flex;
-        flex-direction: column;
-    }
+    .table { display: flex; flex-direction: column; }
     .row {
         display: flex;
         justify-content: space-between;
@@ -71,9 +61,7 @@
         font-weight: 700;
         text-align: right;
     }
-    .error {
-        color: #ff4d4f !important;
-    }
+    .error { color: #ff4d4f !important; }
 </style>
 </head>
 <body>
@@ -109,20 +97,22 @@ var msgs = document.getElementById("msgs");
 
 function DLProgress(e) {
     var percent = Math.round((e.loaded / e.total) * 100);
+    msgs.className = "col-value";
     msgs.innerText = "Đang lưu Cache: " + percent + "%";
 }
 
 function DisplayCacheProgress() {
+    msgs.className = "col-value";
     msgs.innerText = "Lưu Cache thành công! ✓";
     setTimeout(function() {
         msgs.innerText = "Hãy đóng và mở lại trình duyệt...";
-    }, 1800);
+    }, 1500);
 }
 
 if (window.applicationCache) {
     window.applicationCache.addEventListener("progress", DLProgress, false);
-    window.applicationCache.oncached = function() { DisplayCacheProgress(); };
-    window.applicationCache.onupdateready = function() { DisplayCacheProgress(); };
+    window.applicationCache.oncached = DisplayCacheProgress;
+    window.applicationCache.onupdateready = DisplayCacheProgress;
     window.applicationCache.onerror = function() {
         msgs.className = "col-value error";
         msgs.innerText = "Lỗi cài đặt Cache! Xóa dữ liệu và thử lại...";
